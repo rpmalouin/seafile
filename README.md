@@ -1,3 +1,4 @@
+<img width="593" height="521" alt="Screenshot 2026-06-25 at 11 08 47 AM" src="https://github.com/user-attachments/assets/125acba1-5f80-4b36-8c8a-d7e6bd9fb37f" />
 Seafile MC 13.x + SeaDoc + ONLYOFFICE + Caddy — Docker Deployment
 A fully working, production‑ready Docker Compose deployment of Seafile MC 13.x, including:
 SeaDoc Server (real‑time collaborative editing)
@@ -35,6 +36,9 @@ ONLYOFFICE Document Server	Office document editing
 Caddy	Reverse proxy + HTTPS
 ---
 🧩 Architecture Diagram
+<img width="593" height="521" alt="Screenshot 2026-06-25 at 11 08 47 AM" src="https://github.com/user-attachments/assets/af72f444-1145-45d4-8826-0f6d5eb022fc" />
+
+
                    ┌──────────────────────────────┐
                    │            Clients            │
                    └───────────────┬──────────────┘
