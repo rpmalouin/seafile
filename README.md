@@ -35,15 +35,21 @@ ONLYOFFICE Document Server	Office document editing
 Caddy	Reverse proxy + HTTPS
 ---
 🧩 Architecture Diagram
+
 <img width="593" height="521" alt="Screenshot 2026-06-25 at 11 08 47 AM" src="https://github.com/user-attachments/assets/af72f444-1145-45d4-8826-0f6d5eb022fc" />
+
 ---
 📁 Directory Layout
+
 <img width="697" height="229" alt="Screenshot 2026-06-25 at 11 12 09 AM" src="https://github.com/user-attachments/assets/01a8c5a0-2b65-40fe-8397-2991ee0825d5" />
+
 All paths are relative and safe for public sharing.
 ---
 🛠 Environment Variables
 Create a .env file based on this template:
+
 <img width="697" height="411" alt="Screenshot 2026-06-25 at 11 13 40 AM" src="https://github.com/user-attachments/assets/d1f1c3b5-7da5-41c7-924f-465014fcf652" />
+
 ---
 🚀 Deployment
 Start the full stack:
@@ -58,7 +64,9 @@ docker compose down
 ---
 🔧 Caddy Reverse Proxy
 Example Caddyfile:
+
 <img width="617" height="106" alt="Screenshot 2026-06-25 at 11 14 55 AM" src="https://github.com/user-attachments/assets/85aa7ea8-cbbd-468c-b003-247719e6dc15" />
+
 ---
 🧪 Testing
 SeaDoc
