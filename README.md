@@ -1,6 +1,9 @@
-Seafile MC 13.x + SeaDoc + ONLYOFFICE + Caddy (Full Docker Stack)
+Absolutely, Ron — here is a clean, public‑safe, GitHub‑ready README.md written for your exact stack. It explains the architecture, components, networks, and how everything fits together without exposing any secrets.
+You can drop this directly into your repo.
+---
+Seafile MC 13.x + SeaDoc + ONLYOFFICE + Caddy — Docker Deployment
 A fully working, production‑ready Docker Compose deployment of Seafile MC 13.x, including:
-SeaDoc (standalone backend)
+SeaDoc Server (real‑time collaborative editing)
 ONLYOFFICE Document Server
 MariaDB 10.11
 Redis
@@ -8,14 +11,21 @@ Memcached
 Caddy reverse proxy
 Clean network separation
 JWT‑secured document editing
-Full compatibility with Seafile 13.x
-This stack is designed for homelab, small business, and self‑hosted cloud environments.
+This repository provides a complete, reproducible template for running Seafile MC with both SeaDoc and ONLYOFFICE in a modern homelab or small‑business environment.
 ---
-📌 Overview
-This deployment uses a multi‑container architecture with two isolated networks:
-seafile-net → internal services (DB, Redis, Memcached, Seafile, SeaDoc)
-caddy-net → public‑facing services (Caddy, Seafile, SeaDoc, ONLYOFFICE)
-This prevents port conflicts, isolates internal traffic, and ensures SeaDoc and ONLYOFFICE integrate cleanly with Seafile MC.
+📌 Features
+✔ SeaDoc real‑time collaboration
+Supports .sdoc documents with live multi‑user editing.
+✔ ONLYOFFICE integration
+Full editing for .docx, .xlsx, .pptx.
+✔ Caddy reverse proxy
+Handles HTTPS termination and routing for all services.
+✔ Clean network separation
+Two networks:
+seafile-net → internal services
+caddy-net → public‑facing services
+✔ Production‑ready
+Persistent volumes, health checks (optional), and clean service dependencies.
 ---
 📦 Components
 Service	Purpose
@@ -24,57 +34,134 @@ Redis	Pub/Sub for SeaDoc + Seahub
 Memcached	Seahub caching
 Seafile MC 13.x	Main application server
 SeaDoc Server	Real‑time collaborative document editing
-ONLYOFFICE Document Server	Office document editing (.docx, .xlsx, .pptx)
-Caddy	Reverse proxy + HTTPS termination
+ONLYOFFICE Document Server	Office document editing
+Caddy	Reverse proxy + HTTPS
 ---
-🚀 Features
-✔ SeaDoc real‑time collaboration
-Supports .sdoc documents with live editing.
-✔ ONLYOFFICE integration
-Full editing for .docx, .xlsx, .pptx.
-✔ JWT‑secured document editing
-Shared JWT key between Seafile, SeaDoc, and ONLYOFFICE.
-✔ Clean network separation
-Avoids port collisions and internal Nginx conflicts.
-✔ Production‑ready
-Persistent volumes, health checks (optional), and clean service dependencies.
----
-📁 Directory Layout
-/appdata/seafile/
-    ├── data/           # Seafile shared data
-    ├── db/             # MariaDB data
-    ├── caddy/          # Caddy config + data
-    ├── seadoc-data/    # SeaDoc storage
-/appdata/onlyoffice/
-    ├── data/
-    ├── logs/
+🧩 Architecture Diagram
+                   ┌──────────────────────────────┐
+                   │            Clients            │
+                   └───────────────┬──────────────┘
+                                   │
+                          HTTPS / HTTP
+                                   │
+                        ┌──────────▼──────────┐
+                        │        Caddy        │
+                        └───────┬─────┬──────┘
+                                │     │
+                     ┌──────────┘     └──────────┐
+                     ▼                             ▼
+            ┌────────────────┐            ┌──────────────────┐
+            │    Seafile     │            │   ONLYOFFICE      │
+            │  (MC 13.x)     │            │ Document Server   │
+            └──────┬─────────┘            └──────────────────┘
+                   │
+                   ▼
+         ┌──────────────────────┐
+         │      SeaDoc          │
+         │  (Standalone 2.0.9)  │
+         └─────────┬────────────┘
+                   │
+     ┌─────────────▼──────────────┐
+     │   MariaDB / Redis / Memcached │
+     └──────────────────────────────┘
 
 ---
-🧪 Testing the Deployment
+📁 Directory Layout
+.
+├── docker-compose.yml
+├── Caddyfile
+├── db/
+├── seafile-data/
+├── seadoc-data/
+├── onlyoffice/
+│   ├── data/
+│   └── logs/
+└── caddy/
+    ├── data/
+    └── config/
+
+All paths are relative and safe for public sharing.
+---
+🛠 Environment Variables
+Create a .env file based on this template:
+SEAFILE_IMAGE=seafileltd/seafile-mc:13.0.24
+SEAFILE_DB_IMAGE=mariadb:10.11
+SEAFILE_REDIS_IMAGE=redis:7-alpine
+
+SEAFILE_MYSQL_DB_HOST=db
+SEAFILE_MYSQL_DB_PORT=3306
+SEAFILE_MYSQL_DB_USER=seafile
+SEAFILE_MYSQL_DB_PASSWORD=CHANGE_ME
+
+INIT_SEAFILE_MYSQL_ROOT_PASSWORD=CHANGE_ME
+
+SEAFILE_MYSQL_DB_CCNET_DB_NAME=ccnet_db
+SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=seafile_db
+SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=seahub_db
+
+TIME_ZONE=UTC
+SEAFILE_SERVER_HOSTNAME=example.com
+SEAFILE_SERVER_PROTOCOL=https
+
+ENABLE_SEADOC=true
+SEADOC_SERVER_URL=http://seadoc:7070
+
+JWT_PRIVATE_KEY=CHANGE_ME
+REDIS_PASSWORD=CHANGE_ME
+
+---
+🚀 Deployment
+Start the full stack:
+docker compose up -d
+
+Check logs:
+docker compose logs -f
+
+Stop the stack:
+docker compose down
+
+---
+🔧 Caddy Reverse Proxy
+Example Caddyfile:
+example.com {
+    reverse_proxy / http://seafile:80
+    reverse_proxy /sdoc/* http://seadoc:7070
+    reverse_proxy /onlyoffice/* http://onlyoffice-documentserver:80
+}
+
+---
+🧪 Testing
 SeaDoc
-Open an .sdoc file → should load the SeaDoc editor.
+Open an .sdoc file → SeaDoc editor should load.
 ONLYOFFICE
-Open a .docx → should load the OO editor.
+Open a .docx → ONLYOFFICE editor should load.
 Seafile
-Login → upload → sync → share → all should work.
+Login → upload → sync → share → all should work normally.
 ---
 🔐 Security Notes
-Use HTTPS (Caddy handles this automatically).
-Rotate JWT keys periodically.
-Use strong DB passwords.
-Restrict external DB access.
-Keep images updated.
+Replace all CHANGE_ME values in .env
+Use HTTPS (Caddy handles this automatically)
+Use strong DB + JWT secrets
+Restrict external DB access
+Keep images updated
 ---
 📦 Backup Strategy
 Backup:
-/appdata/seafile/data
-/appdata/seafile/db
-/appdata/seafile/seadoc-data
-/appdata/onlyoffice/data
+./seafile-data
+./db
+./seadoc-data
+./onlyoffice/data
 Plus a SQL dump:
 mysqldump -u root -p --all-databases > seafile-backup.sql
 
 ---
 📚 Credits
-This deployment was assembled through extensive testing, debugging, and refinement in a real homelab environment.
-Special thanks to the Seafile community for documentation and reference implementations.
+This deployment is based on real‑world testing and refinement in a homelab environment.
+It is intended as a clean, reproducible template for anyone deploying Seafile MC with SeaDoc and ONLYOFFICE.
+---
+If you want, I can also generate:
+LICENSE
+.env.example
+architecture.svg
+A GitHub‑ready commit message
+Just say the word.
