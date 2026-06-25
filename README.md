@@ -1,13 +1,23 @@
 Seafile MC 13.x + SeaDoc + ONLYOFFICE + Caddy — Docker Deployment
+
 A fully working, production‑ready Docker Compose deployment of Seafile MC 13.x, including:
+
 SeaDoc Server (real‑time collaborative editing)
+
 ONLYOFFICE Document Server
+
 MariaDB 10.11
+
 Redis
+
 Memcached
+
 Caddy reverse proxy
+
 Clean network separation
+
 JWT‑secured document editing
+
 This repository provides a complete, reproducible template for running Seafile MC with both SeaDoc and ONLYOFFICE in a modern homelab or small‑business environment.
 ---
 📌 Features
@@ -34,14 +44,23 @@ caddy-net → public‑facing services
 Persistent volumes, health checks (optional), and clean service dependencies.
 ---
 📦 Components
+
 Service	Purpose
+
 MariaDB 10.11	Seafile database backend
+
 Redis	Pub/Sub for SeaDoc + Seahub
+
 Memcached	Seahub caching
+
 Seafile MC 13.x	Main application server
+
 SeaDoc Server	Real‑time collaborative document editing
+
 ONLYOFFICE Document Server	Office document editing
+
 Caddy	Reverse proxy + HTTPS
+
 ---
 🧩 Architecture Diagram
 
