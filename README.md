@@ -38,26 +38,7 @@ Caddy	Reverse proxy + HTTPS
 <img width="593" height="521" alt="Screenshot 2026-06-25 at 11 08 47 AM" src="https://github.com/user-attachments/assets/af72f444-1145-45d4-8826-0f6d5eb022fc" />
 
 🧩 Architecture Diagram
----
-📁 Directory Layout
 
-flowchart TB
-
-    %% Clients
-    A[Clients] -->|HTTPS / HTTP| B[Caddy]
-
-    %% Caddy routes
-    B --> C[Seafile<br/>(MC 13.x)]
-    B --> D[ONLYOFFICE<br/>Document Server]
-
-    %% Seafile to SeaDoc
-    C --> E[SeaDoc<br/>(Standalone 2.0.9)]
-
-    %% Backend services
-    E --> F[(MariaDB<br/>Redis<br/>Memcached)]
-
-
-All paths are relative and safe for public sharing.
 ---
 🛠 Environment Variables
 Create a .env file based on this template:
