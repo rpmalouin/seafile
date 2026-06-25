@@ -10,13 +10,13 @@ networks:
 
 services:
   db:
-    image: mariadb:10.11
+    image: ${SEAFILE_DB_IMAGE:-mariadb:10.11}
     container_name: seafile-mysql
     restart: unless-stopped
     ports:
       - "3307:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=CHANGE_ME
+      - MYSQL_ROOT_PASSWORD=${INIT_SEAFILE_MYSQL_ROOT_PASSWORD}
       - MYSQL_LOG_CONSOLE=true
       - MARIADB_AUTO_UPGRADE=1
     volumes:
@@ -31,13 +31,13 @@ services:
       retries: 10
 
   redis:
-    image: redis:7-alpine
+    image: ${SEAFILE_REDIS_IMAGE}
     container_name: seafile-redis
     restart: unless-stopped
     command: >
       /bin/sh -c "redis-server --requirepass \"$REDIS_PASSWORD\""
     environment:
-      - REDIS_PASSWORD=CHANGE_ME
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     networks:
       - seafile-net
 
@@ -71,14 +71,14 @@ services:
     volumes:
       - ./seadoc-data:/shared
     environment:
-      - DB_HOST=db
-      - DB_USER=seafile
-      - DB_PASSWORD=CHANGE_ME
-      - DB_NAME=seahub_db
-      - TIME_ZONE=UTC
-      - JWT_PRIVATE_KEY=CHANGE_ME
-      - SEAFILE_SERVER_HOSTNAME=example.com
-      - SEAFILE_SERVER_PROTOCOL=https
+      - DB_HOST=${SEAFILE_MYSQL_DB_HOST}
+      - DB_USER=${SEAFILE_MYSQL_DB_USER}
+      - DB_PASSWORD=${SEAFILE_MYSQL_DB_PASSWORD}
+      - DB_NAME=${SEAFILE_MYSQL_DB_SEAHUB_DB_NAME}
+      - TIME_ZONE=${TIME_ZONE}
+      - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+      - SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
+      - SEAFILE_SERVER_PROTOCOL=${SEAFILE_SERVER_PROTOCOL}
       - SEAHUB_SERVICE_URL=http://seafile:80
     ports:
       - "7070:7070"
@@ -90,7 +90,7 @@ services:
       - caddy-net
 
   seafile:
-    image: seafileltd/seafile-mc:13.0.24
+    image: ${SEAFILE_IMAGE}
     container_name: seafile
     restart: unless-stopped
     extra_hosts:
@@ -98,38 +98,38 @@ services:
     volumes:
       - ./seafile-data:/shared
     environment:
-      - SEAFILE_MYSQL_DB_HOST=db
-      - SEAFILE_MYSQL_DB_PORT=3306
-      - SEAFILE_MYSQL_DB_USER=seafile
-      - SEAFILE_MYSQL_DB_PASSWORD=CHANGE_ME
-      - INIT_SEAFILE_MYSQL_ROOT_PASSWORD=CHANGE_ME
-      - SEAFILE_MYSQL_DB_CCNET_DB_NAME=ccnet_db
-      - SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=seafile_db
-      - SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=seahub_db
-      - TIME_ZONE=UTC
-      - INIT_SEAFILE_ADMIN_EMAIL=admin@example.com
-      - INIT_SEAFILE_ADMIN_PASSWORD=CHANGE_ME
-      - SEAFILE_SERVER_HOSTNAME=example.com
-      - SEAFILE_SERVER_PROTOCOL=https
-      - SITE_ROOT=/
-      - NON_ROOT=false
-      - JWT_PRIVATE_KEY=CHANGE_ME
-      - SEAFILE_LOG_TO_STDOUT=true
-      - ENABLE_GO_FILESERVER=true
-      - ENABLE_SEADOC=true
-      - SEADOC_SERVER_URL=http://seadoc:7070
-      - CACHE_PROVIDER=memcached
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=CHANGE_ME
-      - MEMCACHED_HOST=memcached
-      - MEMCACHED_PORT=11211
-      - ENABLE_NOTIFICATION_SERVER=true
-      - ENABLE_SEAFILE_AI=false
-      - ENABLE_FACE_RECOGNITION=false
-      - SEAFILE_AI_SERVER_URL=
-      - SEAFILE_AI_SECRET_KEY=
-      - MD_FILE_COUNT_LIMIT=5000
+      - SEAFILE_MYSQL_DB_HOST=${SEAFILE_MYSQL_DB_HOST}
+      - SEAFILE_MYSQL_DB_PORT=${SEAFILE_MYSQL_DB_PORT}
+      - SEAFILE_MYSQL_DB_USER=${SEAFILE_MYSQL_DB_USER}
+      - SEAFILE_MYSQL_DB_PASSWORD=${SEAFILE_MYSQL_DB_PASSWORD}
+      - INIT_SEAFILE_MYSQL_ROOT_PASSWORD=${INIT_SEAFILE_MYSQL_ROOT_PASSWORD}
+      - SEAFILE_MYSQL_DB_CCNET_DB_NAME=${SEAFILE_MYSQL_DB_CCNET_DB_NAME}
+      - SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=${SEAFILE_MYSQL_DB_SEAFILE_DB_NAME}
+      - SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=${SEAFILE_MYSQL_DB_SEAHUB_DB_NAME}
+      - TIME_ZONE=${TIME_ZONE}
+      - INIT_SEAFILE_ADMIN_EMAIL=${INIT_SEAFILE_ADMIN_EMAIL}
+      - INIT_SEAFILE_ADMIN_PASSWORD=${INIT_SEAFILE_ADMIN_PASSWORD}
+      - SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
+      - SEAFILE_SERVER_PROTOCOL=${SEAFILE_SERVER_PROTOCOL}
+      - SITE_ROOT=${SITE_ROOT}
+      - NON_ROOT=${NON_ROOT}
+      - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+      - SEAFILE_LOG_TO_STDOUT=${SEAFILE_LOG_TO_STDOUT}
+      - ENABLE_GO_FILESERVER=${ENABLE_GO_FILESERVER}
+      - ENABLE_SEADOC=${ENABLE_SEADOC}
+      - SEADOC_SERVER_URL=${SEADOC_SERVER_URL}
+      - CACHE_PROVIDER=${CACHE_PROVIDER}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - MEMCACHED_HOST=${MEMCACHED_HOST}
+      - MEMCACHED_PORT=${MEMCACHED_PORT}
+      - ENABLE_NOTIFICATION_SERVER=${ENABLE_NOTIFICATION_SERVER}
+      - ENABLE_SEAFILE_AI=${ENABLE_SEAFILE_AI}
+      - ENABLE_FACE_RECOGNITION=${ENABLE_FACE_RECOGNITION}
+      - SEAFILE_AI_SERVER_URL=${SEAFILE_AI_SERVER_URL}
+      - SEAFILE_AI_SECRET_KEY=${SEAFILE_AI_SECRET_KEY}
+      - MD_FILE_COUNT_LIMIT=${MD_FILE_COUNT_LIMIT}
     depends_on:
       db:
         condition: service_healthy
@@ -145,7 +145,7 @@ services:
     restart: unless-stopped
     environment:
       - JWT_ENABLED=true
-      - JWT_SECRET=CHANGE_ME
+      - JWT_SECRET=${JWT_PRIVATE_KEY}
     volumes:
       - ./onlyoffice/data:/var/www/onlyoffice/Data
       - ./onlyoffice/logs:/var/log/onlyoffice
