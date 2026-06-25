@@ -27,35 +27,6 @@ SeaDoc Server	Real‑time collaborative document editing
 ONLYOFFICE Document Server	Office document editing (.docx, .xlsx, .pptx)
 Caddy	Reverse proxy + HTTPS termination
 ---
-🧩 Architecture Diagram
-                   ┌──────────────────────────────┐
-                   │            Clients            │
-                   └───────────────┬──────────────┘
-                                   │
-                          HTTPS / HTTP
-                                   │
-                        ┌──────────▼──────────┐
-                        │        Caddy        │
-                        └───────┬─────┬──────┘
-                                │     │
-                     ┌──────────┘     └──────────┐
-                     ▼                             ▼
-            ┌────────────────┐            ┌──────────────────┐
-            │    Seafile     │            │   ONLYOFFICE      │
-            │  (MC 13.x)     │            │ Document Server   │
-            └──────┬─────────┘            └──────────────────┘
-                   │
-                   ▼
-         ┌──────────────────────┐
-         │      SeaDoc          │
-         │  (Standalone 2.0.9)  │
-         └─────────┬────────────┘
-                   │
-     ┌─────────────▼──────────────┐
-     │   MariaDB / Redis / Memcached │
-     └──────────────────────────────┘
-
----
 🚀 Features
 ✔ SeaDoc real‑time collaboration
 Supports .sdoc documents with live editing.
@@ -77,51 +48,6 @@ Persistent volumes, health checks (optional), and clean service dependencies.
 /appdata/onlyoffice/
     ├── data/
     ├── logs/
-
----
-🛠 Environment Variables
-Your .env file should define:
-SEAFILE_IMAGE=seafileltd/seafile-mc:13.0.24
-SEAFILE_DB_IMAGE=mariadb:10.11
-SEAFILE_REDIS_IMAGE=redis:7-alpine
-
-SEAFILE_MYSQL_DB_HOST=db
-SEAFILE_MYSQL_DB_PORT=3306
-SEAFILE_MYSQL_DB_USER=seafile
-SEAFILE_MYSQL_DB_PASSWORD=yourpassword
-
-INIT_SEAFILE_MYSQL_ROOT_PASSWORD=yourrootpass
-
-SEAFILE_MYSQL_DB_CCNET_DB_NAME=ccnet_db
-SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=seafile_db
-SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=seahub_db
-
-TIME_ZONE=America/New_York
-SEAFILE_SERVER_HOSTNAME=your.domain.com
-SEAFILE_SERVER_PROTOCOL=https
-
-ENABLE_SEADOC=true
-SEADOC_SERVER_URL=http://seadoc:7070
-
-JWT_PRIVATE_KEY=YourSuperSecretKey
-
----
-📜 Docker Compose (Working Version)
-Note: This README does not include the YAML inline to avoid accidental edits.
-Your working YAML should be committed as docker-compose.yml in this repo.
----
-🔧 Caddy Reverse Proxy
-Your Caddyfile should route:
-/ → Seafile (8085)
-/seafhttp → Seafile file server
-/sdoc/ → SeaDoc (7070)
-/onlyoffice/ → ONLYOFFICE
-Example:
-your.domain.com {
-    reverse_proxy / http://seafile:80
-    reverse_proxy /sdoc/* http://seadoc:7070
-    reverse_proxy /onlyoffice/* http://onlyoffice-documentserver:80
-}
 
 ---
 🧪 Testing the Deployment
