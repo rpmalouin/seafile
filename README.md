@@ -18,49 +18,52 @@ Clean network separation
 
 JWT‑secured document editing
 
-This repository provides a complete, reproducible template for running Seafile MC with both SeaDoc and ONLYOFFICE in a modern homelab or small‑business environment.
----
+  This repository provides a complete, reproducible template for running Seafile MC 
+  with both SeaDoc and ONLYOFFICE in a modern homelab or small‑business environment.
+
 📌 Features
 ✔ SeaDoc real‑time collaboration
 
-Supports .sdoc documents with live multi‑user editing.
+  Supports .sdoc documents with live multi‑user editing.
 
 ✔ ONLYOFFICE integration
 
-Full editing for .docx, .xlsx, .pptx.
+  Full editing for .docx, .xlsx, .pptx.
 
 ✔ Caddy reverse proxy
 
-Handles HTTPS termination and routing for all services.
+  Handles HTTPS termination and routing for all services.
 
 ✔ Clean network separation
 
-Two networks:
-seafile-net → internal services
-caddy-net → public‑facing services
+  Two networks:
+
+    seafile-net → internal services
+    caddy-net → public‑facing services
 
 ✔ Production‑ready
 
-Persistent volumes, health checks (optional), and clean service dependencies.
----
+  Persistent volumes, health checks (optional), and clean service dependencies.
+
+
 📦 Components
 
 Service	Purpose
 
-MariaDB 10.11	Seafile database backend
-
-Redis	Pub/Sub for SeaDoc + Seahub
-
-Memcached	Seahub caching
-
-Seafile MC 13.x	Main application server
-
-SeaDoc Server	Real‑time collaborative document editing
-
-ONLYOFFICE Document Server	Office document editing
-
-Caddy	Reverse proxy + HTTPS
-
+  MariaDB 10.11	Seafile database backend
+  
+  Redis	Pub/Sub for SeaDoc + Seahub
+  
+  Memcached	Seahub caching
+  
+  Seafile MC 13.x	Main application server
+  
+  SeaDoc Server	Real‑time collaborative document editing
+  
+  ONLYOFFICE Document Server	Office document editing
+  
+  Caddy	Reverse proxy + HTTPS
+  
 ---
 🧩 Architecture Diagram
 
@@ -76,13 +79,13 @@ Create a docker-compose.yaml based on the included .yaml
 ---
 🚀 Deployment
 Start the full stack:
-docker compose up -d
+  docker compose up -d
 
 Check logs:
-docker compose logs -f
+  docker compose logs -f
 
 Stop the stack:
-docker compose down
+  docker compose down
 
 ---
 🔧 Caddy Reverse Proxy
@@ -93,27 +96,28 @@ Example Caddyfile:
 ---
 🧪 Testing
 SeaDoc
-Open an .sdoc file → SeaDoc editor should load.
+  Open an .sdoc file → SeaDoc editor should load.
 ONLYOFFICE
-Open a .docx → ONLYOFFICE editor should load.
+  Open a .docx → ONLYOFFICE editor should load.
+
 Seafile
 Login → upload → sync → share → all should work normally.
 ---
 🔐 Security Notes
-Replace all CHANGE_ME values in .env
-Use HTTPS (Caddy handles this automatically)
-Use strong DB + JWT secrets
-Restrict external DB access
-Keep images updated
+  Replace all CHANGE_ME values in .env
+  Use HTTPS (Caddy handles this automatically)
+  Use strong DB + JWT secrets
+  Restrict external DB access
+  Keep images updated
 ---
 📦 Backup Strategy
 Backup:
-./seafile-data
-./db
-./seadoc-data
-./onlyoffice/data
-Plus a SQL dump:
-mysqldump -u root -p --all-databases > seafile-backup.sql
+  ./seafile-data
+  ./db
+  ./seadoc-data
+  ./onlyoffice/data
+  Plus a SQL dump:
+  mysqldump -u root -p --all-databases > seafile-backup.sql
 
 ---
 📚 Credits
