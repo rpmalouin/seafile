@@ -12,16 +12,25 @@ This repository provides a complete, reproducible template for running Seafile M
 ---
 📌 Features
 ✔ SeaDoc real‑time collaboration
+
 Supports .sdoc documents with live multi‑user editing.
+
 ✔ ONLYOFFICE integration
+
 Full editing for .docx, .xlsx, .pptx.
+
 ✔ Caddy reverse proxy
+
 Handles HTTPS termination and routing for all services.
+
 ✔ Clean network separation
+
 Two networks:
 seafile-net → internal services
 caddy-net → public‑facing services
+
 ✔ Production‑ready
+
 Persistent volumes, health checks (optional), and clean service dependencies.
 ---
 📦 Components
