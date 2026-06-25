@@ -34,6 +34,10 @@ SeaDoc Server	Real‑time collaborative document editing
 ONLYOFFICE Document Server	Office document editing
 Caddy	Reverse proxy + HTTPS
 ---
+
+<img width="1024" height="899" alt="image" src="https://github.com/user-attachments/assets/5cde8e0d-48a6-4b45-9cbb-09669e9ed190" />
+
+
 🛠 Environment Variables
 Create a .env file based on this template:
 
