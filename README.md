@@ -91,3 +91,4 @@ mysqldump -u root -p --all-databases > seafile-backup.sql
 This deployment is based on real‑world testing and refinement in a homelab environment.
 It is intended as a clean, reproducible template for anyone deploying Seafile MC with SeaDoc and ONLYOFFICE.
 
+https://manual.seafile.com/latest/
