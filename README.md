@@ -40,9 +40,10 @@ Caddy	Reverse proxy + HTTPS
 
 ---
 🛠 Environment Variables
-Create a .env file based on this template:
+Create a .env file based on the included .env
 
-<img width="697" height="411" alt="Screenshot 2026-06-25 at 11 13 40 AM" src="https://github.com/user-attachments/assets/d1f1c3b5-7da5-41c7-924f-465014fcf652" />
+🛠 Docker Compose yaml
+Create a docker-compose.yaml based on the included .yaml
 
 ---
 🚀 Deployment
